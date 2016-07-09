@@ -1,4 +1,4 @@
-# teensy-vult-example
+# Vult for Teensy Audio Library
 An example of generating Vult code compatible with the Teensy Audio Library
 
 ## How to use
