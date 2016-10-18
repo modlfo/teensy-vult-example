@@ -14,7 +14,8 @@ void Phasedist_change_init(Phasedist__ctx_type_0 &_output_){
 }
 
 uint8_t Phasedist_change(Phasedist__ctx_type_0 &_ctx, fix16_t x){
-   uint8_t v = (_ctx.pre_x != x);
+   uint8_t v;
+   v = (_ctx.pre_x != x);
    _ctx.pre_x = x;
    return v;
 }
@@ -38,12 +39,14 @@ void Phasedist_phasor_init(Phasedist__ctx_type_2 &_output_){
 }
 
 fix16_t Phasedist_phasor(Phasedist__ctx_type_2 &_ctx, fix16_t pitch, uint8_t reset){
-   if(Phasedist_change(_ctx._inst1,pitch)){
+   uint8_t _cond_3;
+   _cond_3 = Phasedist_change(_ctx._inst1,pitch);
+   if(_cond_3){
       _ctx.rate = Phasedist_pitchToRate(pitch);
    }
-   if(reset)_ctx.phase = 0x0 /* 0.000000 */;
+   if(reset){ _ctx.phase = 0x0 /* 0.000000 */; }
    else
-   _ctx.phase = (fix_add(_ctx.phase,_ctx.rate) % 0x10000 /* 1.000000 */);
+   { _ctx.phase = (fix_add(_ctx.phase,_ctx.rate) % 0x10000 /* 1.000000 */); }
    return _ctx.phase;
 }
 
@@ -64,12 +67,17 @@ void Phasedist_process_init(Phasedist__ctx_type_3 &_output_){
 }
 
 fix16_t Phasedist_process(Phasedist__ctx_type_3 &_ctx, fix16_t input){
-   fix16_t phase1 = Phasedist_phasor(_ctx._inst1,_ctx.pitch,0);
-   fix16_t comp = fix_add(0x10000 /* 1.000000 */,(- phase1));
-   uint8_t reset = (fix_add(_ctx.pre_phase1,(- phase1)) > 0x8000 /* 0.500000 */);
+   fix16_t phase1;
+   phase1 = Phasedist_phasor(_ctx._inst1,_ctx.pitch,0);
+   fix16_t comp;
+   comp = fix_add(0x10000 /* 1.000000 */,(- phase1));
+   uint8_t reset;
+   reset = (fix_add(_ctx.pre_phase1,(- phase1)) > 0x8000 /* 0.500000 */);
    _ctx.pre_phase1 = phase1;
-   fix16_t phase2 = Phasedist_phasor(_ctx._inst2,fix_add(_ctx.pitch,fix_mul(_ctx.detune,0x200000 /* 32.000000 */)),reset);
-   fix16_t sine = fix_sin(fix_mul(0x6487e /* 6.283185 */,phase2));
+   fix16_t phase2;
+   phase2 = Phasedist_phasor(_ctx._inst2,fix_add(_ctx.pitch,fix_mul(_ctx.detune,0x200000 /* 32.000000 */)),reset);
+   fix16_t sine;
+   sine = fix_sin(fix_mul(0x6487e /* 6.283185 */,phase2));
    return fix_mul(sine,comp);
 }
 
@@ -78,7 +86,7 @@ void Phasedist_noteOn_init(Phasedist__ctx_type_3 &_output_){
    return ;
 }
 
-void Phasedist_noteOn(Phasedist__ctx_type_3 &_ctx, int note, int velocity){
+void Phasedist_noteOn(Phasedist__ctx_type_3 &_ctx, int note, int velocity, int channel){
    _ctx.pitch = int_to_fix(note);
 }
 
@@ -87,7 +95,7 @@ void Phasedist_noteOff_init(Phasedist__ctx_type_3 &_output_){
    return ;
 }
 
-void Phasedist_noteOff(Phasedist__ctx_type_3 &_ctx, int note){
+void Phasedist_noteOff(Phasedist__ctx_type_3 &_ctx, int note, int channel){
 }
 
 void Phasedist_controlChange_init(Phasedist__ctx_type_3 &_output_){
@@ -95,8 +103,10 @@ void Phasedist_controlChange_init(Phasedist__ctx_type_3 &_output_){
    return ;
 }
 
-void Phasedist_controlChange(Phasedist__ctx_type_3 &_ctx, int control, int value){
-   if(control == 31){
+void Phasedist_controlChange(Phasedist__ctx_type_3 &_ctx, int control, int value, int channel){
+   uint8_t _cond_2;
+   _cond_2 = (control == 31);
+   if(_cond_2){
       _ctx.detune = fix_mul(int_to_fix(value),0x204 /* 0.007874 */);
    }
 }
@@ -130,5 +140,4 @@ void SynthTest::update(void)
     release(block);
   }
 }
-
 

@@ -55,19 +55,19 @@ typedef Phasedist__ctx_type_3 Phasedist_noteOn_type;
 
 void Phasedist_noteOn_init(Phasedist__ctx_type_3 &_output_);
 
-void Phasedist_noteOn(Phasedist__ctx_type_3 &_ctx, int note, int velocity);
+void Phasedist_noteOn(Phasedist__ctx_type_3 &_ctx, int note, int velocity, int channel);
 
 typedef Phasedist__ctx_type_3 Phasedist_noteOff_type;
 
 void Phasedist_noteOff_init(Phasedist__ctx_type_3 &_output_);
 
-void Phasedist_noteOff(Phasedist__ctx_type_3 &_ctx, int note);
+void Phasedist_noteOff(Phasedist__ctx_type_3 &_ctx, int note, int channel);
 
 typedef Phasedist__ctx_type_3 Phasedist_controlChange_type;
 
 void Phasedist_controlChange_init(Phasedist__ctx_type_3 &_output_);
 
-void Phasedist_controlChange(Phasedist__ctx_type_3 &_ctx, int control, int value);
+void Phasedist_controlChange(Phasedist__ctx_type_3 &_ctx, int control, int value, int channel);
 
 typedef Phasedist__ctx_type_3 Phasedist_default_type;
 
@@ -90,21 +90,21 @@ public:
   }
 
   // Handles note on events
-  void noteOn(int note, int velocity){
+  void noteOn(int note, int velocity, int channel){
     // If the velocity is larger than zero, means that is turning on
-    if(velocity) Phasedist_noteOn(data, note, velocity);
-    else         Phasedist_noteOff(data, note);
+    if(velocity) Phasedist_noteOn(data, note, velocity, channel);
+    else         Phasedist_noteOff(data, note, channel);
   }
 
   // Handles note off events
-  void noteOff(int note, int velocity) {
-    Phasedist_noteOff(data, note);
+  void noteOff(int note, int velocity, int channel) {
+    Phasedist_noteOff(data, note, channel);
 
   }
 
   // Handles control change events
-  void controlChange(int control, int value) {
-    Phasedist_controlChange(data, control, value);
+  void controlChange(int control, int value, int channel) {
+    Phasedist_controlChange(data, control, value, channel);
   }
 
   virtual void update(void);
@@ -115,4 +115,3 @@ private:
 };
 
 #endif // SYNTHTEST_H
-

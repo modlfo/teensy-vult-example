@@ -14,16 +14,16 @@ AudioConnection          patchCord2(voice, 0, i2s1, 1);
 
 // Handles the ontrol change
 void OnControlChange(byte channel, byte control, byte value){
-  voice.controlChange(control,value);
+  voice.controlChange(control,value,channel);
 }
 
 // Handles note on events
 void OnNoteOn(byte channel, byte note, byte velocity){
-  voice.noteOn(note,velocity);
+  voice.noteOn(note,velocity,channel);
 }
 // Handles note on events
 void OnNoteOff(byte channel, byte note, byte velocity){
-  voice.noteOff(note,velocity);
+  voice.noteOff(note,velocity,channel);
 }
 
 void setup() {
